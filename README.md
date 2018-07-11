@@ -1,1 +1,1 @@
-# Wheel-Of-Jeopardy
+# Wheel-Of-Jeopardy, by Team JOWN
