@@ -1,1 +1,1 @@
-# Wheel-Of-Jeopardy, by Team JOWN, except with a branch
+# Wheel-Of-Jeopardy, by Team JOWN
