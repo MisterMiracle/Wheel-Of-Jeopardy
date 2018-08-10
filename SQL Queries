@@ -1,0 +1,11 @@
+--Table Creation: I went with one table, since we can just SELECT UNIQUE for the Categories to get that information
+--which feels like an elegant solution for us.  Do you guys have any issues with that approach?
+
+CREATE TABLE IF NOT EXISTS `Questions` (
+	`id` int(10) NOT NULL auto_increment,
+	`category` varchar(255),
+	`questiontext` varchar(255),
+	`answertext` varchar(255),
+	PRIMARY KEY( `id` )
+);
+
