@@ -9,3 +9,30 @@ CREATE TABLE IF NOT EXISTS `Questions` (
 	PRIMARY KEY( `id` )
 );
 
+--Query to identify Categories within table
+
+SELECT DISTINCT category
+FROM Questions;
+
+--Query to identify # of categories in table (important, since there must be at least 12 categories for the game)
+
+SELECT COUNT(DISTINCT category) AS category_count
+FROM Questions;
+
+--I have an "add question" function. This will in effect be our "add category" function as well, since
+--if there's a new category, it'd be input this way
+--Variables will be delivered as arguments via the Java interface.
+--varA: Serialized ID number
+--varB: Category for Question
+--varC: Question Text
+--varD: Answer Text
+
+INSERT INTO Questions (id, category, questiontext, answertext)
+VALUES (varA, varB, varC, varD)
+
+--This will be the "Delete Category" function, it just takes out everything with the same 
+--varA: the category we wish to delete
+
+DELETE FROM Questions
+WHERE category = varA
+
