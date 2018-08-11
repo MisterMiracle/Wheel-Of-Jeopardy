@@ -1,0 +1,31 @@
+export class  Requirement{
+    id:number;
+    description:string="";
+    id_am:any={};
+    id_be:any={};
+    id_gv:any={};
+    id_ra:any={};
+    id_rm:any={};
+    id_sc:any={};
+    pr_ac:any={};
+    pr_at:any={};
+    pr_ds:any={};
+    pr_ip:any={};
+    pr_ma:any={};
+    pr_pt:any={};
+    de_ae:any={};
+    de_cm:any={};
+    de_dp:any={};
+    rs_rp:any={};
+    rs_co:any={};
+    rs_an:any={};
+    rs_mi:any={};
+    rs_im:any={};
+    rc_rp:any={};
+    rc_im:any={};
+    rc_co:any={};
+    constructor(id:number,description:string){
+        this.id=id;        
+        this.description=description;
+    }
+}
