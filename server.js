@@ -26,9 +26,9 @@ app.use('/questions', questions)
 //app.use('/recommendations',recommendations)
 
 
-app.get('*'),(req,res)=>{
+/* app.get('*'),(req,res)=>{
     res.sendFile(path.join(__dirname,'dist/index.html'))
-}
+} */
 
 var port = process.env.PORT || '3000'
 app.set('port',port)
