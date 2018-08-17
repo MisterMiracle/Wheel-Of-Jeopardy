@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 
+var categoryList = []; //this will be a table of the Category IDs to pick from
+//this categoryList will be used to ensure we don't have the same Category in 2 rounds
+
 dbURL='47.90.209.206'
 dbName="WoJ"
 
@@ -25,6 +28,17 @@ router.get('/getAllCategories',function(req,res) {
                 if(err) {
                 console.log(err);
             }  
+			//loop through entries and add categoryIDs to add to array
+			var i;
+			
+			for(i=0; i<result.length; i++){
+				
+				//Need to Verify this category name (categoryID)
+				categoryList.push(result[i].categoryID);
+				
+			}
+			
+			//send json message to angular
             res.end(json(result));
         })
 })
@@ -42,6 +56,25 @@ router.get('/getCategory',function(req,res) {
 
 //Need to generate 6 random numbers
 router.get('/get6Category',function(req,res) {
+	
+	var cats = [];
+	var currentCat = 0;
+	
+	var i;
+	
+	//this will fill the cats array with 6 random categories
+	for(i = 0; i < 6; i++){
+		
+		//push a random category onto the cats array
+		currentCat = Math.floor(Math.random() * categoryList.length)
+		cats[i].push(categoryList[currentCat]);
+		//i then remove the category from the selectable pool - this ensures 
+		//we don't return a repeat category for round 2
+		categoryList.splice(currentCat, 1);
+		
+	}
+	
+	
     console.log("Fetching Category Information")
 		con.query("SELECT * FROM Questions WHERE categoryID = $1,
 		OR categoryID = $2 OR categoryID = $3 OR categoryID = $4
@@ -54,7 +87,8 @@ router.get('/get6Category',function(req,res) {
     })     
 })
 
-router.put('/addCategory',function(req,res) {
+
+router.post('/addCategory',function(req,res) {
     console.log("Adding Category Information") 
 		con.query("INSERT INTO Questions (questionID, categoryID, category, questiontext, answertext) 
 		VALUES ('value1','value2','value3','value4','value5')",
@@ -68,7 +102,7 @@ router.put('/addCategory',function(req,res) {
 })
 
 // Need help on edit Category
-router.post('/editCategory', function (req, res, next) {    
+router.put('/editCategory', function (req, res, next) {    
     console.log("Editing Category") 
     db.collection('questions').updateOne(
         {_id:new ObjectID(req.body.comm._id)}, 
