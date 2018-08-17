@@ -121,22 +121,42 @@ router.post('/addCategory',function(req,res) {
    
 })
 
-// Need help on edit Category
+// Basically the same as addCategory, but we first delete old entries
 router.put('/editCategory', function (req, res) {    
     console.log("Editing Category") 
-    db.collection('questions').updateOne(
-        {_id:new ObjectID(req.body.comm._id)}, 
-        {$set:{name:req.body.comm.name}},function(err,result){
-            if (err) {console.error(err); res.send(500,err)}
-
-            console.log("One document update");
-            res.end(JSON.stringify(result));
-        }
+	
+	//Delete Previous Entries
+	console.log("Deleting Previous Category for Replacement") 
+		
+	con.query("DELETE FROM Questions WHERE categoryID = ?", req.param('categoryID'),
+		function(err, result) {
+			if (err) {
+			console.error(err); 
+		}
+		console.log("Previous Entries Deleted");
+		
+	})
+	
+	//add 6 questions to the database
+	var j;
+	for(j=1; j<6; j++){
+		con.query("INSERT INTO Questions (categoryID, " +
+		"category, questiontext, answertext) VALUES " +
+		"(?,?,?,?)", catID, req.param('categoryName'), req.param('question?', j+1),
+		req.param('answer?', j+1),
+		function(err, result) {
+			if (err) {
+			console.error(err);
+		}
+			console.log("Question? Added", j+1);
+		})
+	}	
+    res.end();
 )
 });
 
 router.post('/deleteCategory',(req,res)=>{
-    console.log("Deleting Communication Protocol") 
+    console.log("Deleting Category") 
 		//this assumes we're receiving a request to delete a categoryID, which is passed
 		//as an integer parameter from the Angular
 		con.query("DELETE FROM Questions WHERE categoryID = ?", req.param('categoryID'),
