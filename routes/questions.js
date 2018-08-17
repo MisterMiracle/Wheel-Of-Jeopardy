@@ -47,6 +47,9 @@ router.get('/getAllCategories',function(req,res) {
 
 router.get('/getCategory',function(req,res) {
     console.log("Fetching Category Information")
+		
+		
+
 		con.query("SELECT * FROM Questions WHERE categoryID = ?",req.param('categoryID'),
             function(err, result) {
                 if(err) {
@@ -99,22 +102,32 @@ router.post('/addCategory',function(req,res) {
 	do{
 		//choose random CategoryID between 1 and 100 that's not already taken
 	catID = Math.floor(Math.random() * 100);
-	} while(categoryList.contains(catID)) //ensure this catID isn't already taken
-	
+	} while(categoryList.indexOf(catID) >= 0) //ensure this catID isn't already taken
+	console.log("catId is set: ?", catID);
 	
 	
 	//add 6 questions to the database
+	var constructedQuery;
+	var questionConstruct;
+	var answerConstruct;
+	
 	var j;
-	for(j=1; j<6; j++){
-		con.query("INSERT INTO Questions (categoryID, " +
+	for(j=1; j<=6; j++){
+		questionConstruct = "question" + j;
+		answerConstruct = "answer" + j;
+		
+		constructedQuery = "INSERT INTO Questions (categoryID, " +
 		"category, questiontext, answertext) VALUES " +
-		"(?,?,?,?)", catID, req.param('categoryName'), req.param('question?', j+1),
-		req.param('answer?', j+1),
+		"(" + catID + ",'" + req.param('categoryName') + "','" + req.param(questionConstruct) +
+		"','" + req.param(answerConstruct) + "');";
+		
+		console.log(constructedQuery);
+		con.query(constructedQuery,
 		function(err, result) {
 			if (err) {
 			console.error(err);
 		}
-			console.log("Question? Added", j+1);
+			console.log("Question Added", j);
 		})
 	}	
     res.end();
