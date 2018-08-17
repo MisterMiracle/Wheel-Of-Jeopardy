@@ -74,11 +74,12 @@ router.get('/get6Category',function(req,res) {
 		
 	}
 	
-	
+	//this will then ask the database for all questions regarding these 5 categories
     console.log("Fetching Category Information")
-		con.query("SELECT * FROM Questions WHERE categoryID = $1,
-		OR categoryID = $2 OR categoryID = $3 OR categoryID = $4
-		OR categoryID = $5 OR categoryID = $6;",
+		con.query("SELECT * FROM Questions WHERE categoryID = ?,
+		OR categoryID = ? OR categoryID = ? OR categoryID = ?
+		OR categoryID = ? OR categoryID = ?;", [cats[0], cats[1], cats[2], cats[3], cats[4], 
+		cats[5]],
         function(err, result) {
             if(err){
             console.log(err);
