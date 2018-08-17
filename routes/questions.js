@@ -47,7 +47,7 @@ router.get('/getAllCategories',function(req,res) {
 
 router.get('/getCategory',function(req,res) {
     console.log("Fetching Category Information")
-		con.query("SELECT * FROM Questions WHERE categoryID = ?",req.param(categoryID),
+		con.query("SELECT * FROM Questions WHERE categoryID = ?",req.param('categoryID'),
             function(err, result) {
                 if(err) {
                 console.log(err);
@@ -78,30 +78,47 @@ router.get('/get6Category',function(req,res) {
 	
 	//this will then ask the database for all questions regarding these 5 categories
     console.log("Fetching Category Information")
-		con.query("SELECT * FROM Questions WHERE categoryID = ?, OR categoryID = ? " +
-		"OR categoryID = ? OR categoryID = ?OR categoryID = ? OR categoryID = ?;",
-		[cats[0], cats[1], cats[2], cats[3], cats[4], cats[5]],
-        function(err, result) {
-            if(err){
-            console.log(err);
-        }
-        res.end(JSON.stringify(result));
-    })     
+	con.query("SELECT * FROM Questions WHERE categoryID = ?, OR categoryID = ? " +
+	"OR categoryID = ? OR categoryID = ?OR categoryID = ? OR categoryID = ?;",
+	[cats[0], cats[1], cats[2], cats[3], cats[4], cats[5]],
+	function(err, result) {
+		if(err){
+		console.log(err);
+	}
+	res.end(JSON.stringify(result));
+	})     
 })
 
 
 router.post('/addCategory',function(req,res) {
     console.log("Adding Category Information") 
-		con.query("INSERT INTO Questions (questionID, categoryID, " +
+				
+	//Make a new CategoryID number for this
+	var catID;
+
+	do{
+		//choose random CategoryID between 1 and 100 that's not already taken
+	catID = Math.floor(Math.random() * 100);
+	} while(categoryList.contains(catID)) //ensure this catID isn't already taken
+	
+	
+	
+	//add 6 questions to the database
+	var j;
+	for(j=1; j<6; j++){
+		con.query("INSERT INTO Questions (categoryID, " +
 		"category, questiontext, answertext) VALUES " +
-		"(?,?,?,?,?)",
-        function(err, result) {
-            if (err) {
-            console.error(err);
-        }
-        console.log("Category Added");
-        res.end(json(result));
-    })
+		"(?,?,?,?)", catID, req.param('categoryName'), req.param('question?', j+1),
+		req.param('answer?', j+1),
+		function(err, result) {
+			if (err) {
+			console.error(err);
+		}
+			console.log("Question? Added", j+1);
+		})
+	}	
+    res.end();
+   
 })
 
 // Need help on edit Category
@@ -122,7 +139,7 @@ router.post('/deleteCategory',(req,res)=>{
     console.log("Deleting Communication Protocol") 
 		//this assumes we're receiving a request to delete a categoryID, which is passed
 		//as an integer parameter from the Angular
-		con.query("DELETE FROM Questions WHERE categoryID = ?", req.param(categoryID),
+		con.query("DELETE FROM Questions WHERE categoryID = ?", req.param('categoryID'),
             function(err, result) {
                 if (err) {
                 console.error(err); 
