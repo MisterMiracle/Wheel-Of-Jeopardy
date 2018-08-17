@@ -21,9 +21,11 @@ con.connect(function(err) {
 });
 //need to know how to process arrays into mysql
 
+//we need to make sure there's a check in the Angular that if there are
+//less than 12 categories, the game won't start
 router.get('/getAllCategories',function(req,res) {  
    console.log("Fetching All Categories Information")  
-        con.query("SELECT * FROM Questions", 
+        con.query("SELECT DISTINCT categoryID FROM Questions", 
             function(err, result) {
                 if(err) {
                 console.log(err);
@@ -37,9 +39,9 @@ router.get('/getAllCategories',function(req,res) {
 				categoryList.push(result[i].categoryID);
 				
 			}
-			
+			//console.log(JSON.stringify(result));
 			//send json message to angular
-            res.end(json(result));
+            res.end(JSON.stringify(result));
         })
 })
 
@@ -50,7 +52,7 @@ router.get('/getCategory',function(req,res) {
                 if(err) {
                 console.log(err);
         }
-        res.end(JSON(result));
+        res.end(JSON.stringify(result));
     })     
 })
 
@@ -83,7 +85,7 @@ router.get('/get6Category',function(req,res) {
             if(err){
             console.log(err);
         }
-        res.end(json(result));
+        res.end(JSON.stringify(result));
     })     
 })
 
@@ -111,7 +113,7 @@ router.put('/editCategory', function (req, res, next) {
             if (err) {console.error(err); res.send(500,err)}
 
             console.log("One document update");
-            res.end(json(result));
+            res.end(JSON.stringify(result));
         }
 )
 });
@@ -124,8 +126,9 @@ router.post('/deleteCategory',(req,res)=>{
                 console.error(err); 
             }
             console.log("One document deleted");
-            res.end(json(result));
+            res.end(JSON.stringify(result))
         })
+		
 })
 
 module.exports = router;
