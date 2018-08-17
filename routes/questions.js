@@ -31,7 +31,7 @@ router.get('/getAllCategories',function(req,res) {
 
 router.get('/getCategory',function(req,res) {
     console.log("Fetching Category Information")
-		con.query("SELECT * FROM Questions WHERE categoryID = $1",
+		con.query("SELECT * FROM Questions WHERE categoryID = ?",req.body,
             function(err, result) {
                 if(err) {
                 console.log(err);
@@ -83,7 +83,7 @@ router.post('/editCategory', function (req, res, next) {
 
 router.post('/deleteCategory',(req,res)=>{
     console.log("Deleting Communication Protocol") 
-		con.query("DELETE FROM Questions WHERE categoryID = $1", 
+		con.query("DELETE FROM Questions WHERE categoryID = ?", req.body,
             function(err, result) {
                 if (err) {
                 console.error(err); 
