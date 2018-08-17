@@ -17,6 +17,19 @@ con.connect(function(err) {
   console.log("Connected!");
 });
 //need to know how to process arrays into mysql
+var get6Numbers = function(num) {
+    var num = num || 12;
+    var currentNum = 0;
+    var numbers = [];
+    for (var i = 0; i < 6; i++) {
+        do {
+            currentNum = Math.ceil(Math.random() * num);
+        } while(numbers.includes(currentNum))
+        numbers.push(currentNum);
+    }
+    numbers.sort(function(a,b) {return a - b});
+    return numbers;
+}
 
 router.get('/getAllCategories',function(req,res) {  
    console.log("Fetching All Categories Information")  
@@ -41,11 +54,11 @@ router.get('/getCategory',function(req,res) {
 })
 
 //Need to generate 6 random numbers
+//Added function to do so, should be alright now
 router.get('/get6Category',function(req,res) {
+    var numbers = get6Numbers(12);
     console.log("Fetching Category Information")
-		con.query("SELECT * FROM Questions WHERE categoryID = $1,
-		OR categoryID = $2 OR categoryID = $3 OR categoryID = $4
-		OR categoryID = $5 OR categoryID = $6;",
+		con.query("SELECT * FROM Questions WHERE categoryID = ? OR categoryID = ? OR categoryID = ? OR categoryID = ? OR categoryID = ? OR categoryID = ?", numbers,
         function(err, result) {
             if(err){
             console.log(err);
@@ -54,10 +67,10 @@ router.get('/get6Category',function(req,res) {
     })     
 })
 
+//Need to figure out how to parse the Json into SQL command, for loop needed
 router.put('/addCategory',function(req,res) {
     console.log("Adding Category Information") 
-		con.query("INSERT INTO Questions (questionID, categoryID, category, questiontext, answertext) 
-		VALUES ('value1','value2','value3','value4','value5')",
+		con.query("INSERT INTO Questions (questionID, categoryID, category, questiontext, answertext) VALUES ('value1','value2','value3','value4','value5')",
         function(err, result) {
             if (err) {
             console.error(err);
@@ -68,6 +81,7 @@ router.put('/addCategory',function(req,res) {
 })
 
 // Need help on edit Category
+// Probable just a delete and add?
 router.post('/editCategory', function (req, res, next) {    
     console.log("Editing Category") 
     db.collection('questions').updateOne(
