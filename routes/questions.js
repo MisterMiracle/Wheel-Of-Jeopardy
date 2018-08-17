@@ -76,10 +76,9 @@ router.get('/get6Category',function(req,res) {
 	
 	//this will then ask the database for all questions regarding these 5 categories
     console.log("Fetching Category Information")
-		con.query("SELECT * FROM Questions WHERE categoryID = ?,
-		OR categoryID = ? OR categoryID = ? OR categoryID = ?
-		OR categoryID = ? OR categoryID = ?;", [cats[0], cats[1], cats[2], cats[3], cats[4], 
-		cats[5]],
+		con.query("SELECT * FROM Questions WHERE categoryID = ?, OR categoryID = ? " +
+		"OR categoryID = ? OR categoryID = ?OR categoryID = ? OR categoryID = ?;",
+		[cats[0], cats[1], cats[2], cats[3], cats[4], cats[5]],
         function(err, result) {
             if(err){
             console.log(err);
@@ -91,8 +90,9 @@ router.get('/get6Category',function(req,res) {
 
 router.post('/addCategory',function(req,res) {
     console.log("Adding Category Information") 
-		con.query("INSERT INTO Questions (questionID, categoryID, category, questiontext, answertext) 
-		VALUES ('value1','value2','value3','value4','value5')",
+		con.query("INSERT INTO Questions (questionID, categoryID, " +
+		"category, questiontext, answertext) VALUES " +
+		"(?,?,?,?,?)",
         function(err, result) {
             if (err) {
             console.error(err);

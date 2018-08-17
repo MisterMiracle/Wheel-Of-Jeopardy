@@ -5,12 +5,12 @@ var http = require('http')
 var app= express()
 
 //import routes
-var vendors=require('./routes/vendors')
-var features=require('./routes/features')
-var tools=require('./routes/tools')
-var communication_protocol=require('./routes/communication_protocols')
-var requirements=require('./routes/requirements')
-var recommendations=require('./routes/recommendations')
+var questions=require('./routes/questions')
+//var features=require('./routes/features')
+//var tools=require('./routes/tools')
+//var communication_protocol=require('./routes/communication_protocols')
+//var requirements=require('./routes/requirements')
+//var recommendations=require('./routes/recommendations')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
@@ -18,12 +18,12 @@ app.use(bodyParser.urlencoded({extended:false}))
 app.use(express.static(path.join(__dirname,'dist')))
 
 //setup routes
-app.use('/features', features)
-app.use('/communication_protocols', communication_protocol);
-app.use('/vendors', vendors)
-app.use('/requirements',requirements)
-app.use('/tools',tools)
-app.use('/recommendations',recommendations)
+app.use('/questions', questions)
+//app.use('/communication_protocols', communication_protocol);
+//app.use('/vendors', vendors)
+//app.use('/requirements',requirements)
+//app.use('/tools',tools)
+//app.use('/recommendations',recommendations)
 
 
 app.get('*'),(req,res)=>{
