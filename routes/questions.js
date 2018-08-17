@@ -47,7 +47,7 @@ router.get('/getAllCategories',function(req,res) {
 
 router.get('/getCategory',function(req,res) {
     console.log("Fetching Category Information")
-		con.query("SELECT * FROM Questions WHERE categoryID = ?",req.body,
+		con.query("SELECT * FROM Questions WHERE categoryID = ?",req.param(categoryID),
             function(err, result) {
                 if(err) {
                 console.log(err);
@@ -105,7 +105,7 @@ router.post('/addCategory',function(req,res) {
 })
 
 // Need help on edit Category
-router.put('/editCategory', function (req, res, next) {    
+router.put('/editCategory', function (req, res) {    
     console.log("Editing Category") 
     db.collection('questions').updateOne(
         {_id:new ObjectID(req.body.comm._id)}, 
@@ -120,7 +120,9 @@ router.put('/editCategory', function (req, res, next) {
 
 router.post('/deleteCategory',(req,res)=>{
     console.log("Deleting Communication Protocol") 
-		con.query("DELETE FROM Questions WHERE categoryID = ?", req.body,
+		//this assumes we're receiving a request to delete a categoryID, which is passed
+		//as an integer parameter from the Angular
+		con.query("DELETE FROM Questions WHERE categoryID = ?", req.param(categoryID),
             function(err, result) {
                 if (err) {
                 console.error(err); 
