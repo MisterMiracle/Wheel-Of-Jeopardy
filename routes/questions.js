@@ -152,7 +152,7 @@ router.put('/editCategory', function (req, res) {
 		})
 	}	
     res.end();
-)
+
 });
 
 router.post('/deleteCategory',(req,res)=>{
