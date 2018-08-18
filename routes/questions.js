@@ -112,7 +112,7 @@ router.post('/addCategory',function(req,res) {
 	var answerConstruct;
 	
 	var j=1;
-	for(j=1; j<=6; j++){
+	for(j=1; j<=5; j++){
 		questionConstruct = "question" + j;
 		answerConstruct = "answer" + j;
 		
