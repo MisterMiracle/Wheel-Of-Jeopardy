@@ -151,21 +151,31 @@ router.put('/editCategory', function (req, res) {
 		
 	})
 	
-	//add 6 questions to the database
-	var j;
-	for(j=1; j<6; j++){
-		con.query("INSERT INTO Questions (categoryID, " +
+	
+	var constructedQuery;
+	var questionConstruct;
+	var answerConstruct;
+	
+	var j=1;
+	for(j=1; j<=5; j++){
+		questionConstruct = "question" + j;
+		answerConstruct = "answer" + j;
+		
+		constructedQuery = "INSERT INTO Questions (categoryID, " +
 		"category, questiontext, answertext) VALUES " +
-		"(?,?,?,?)", catID, req.param('categoryName'), req.param('question?', j+1),
-		req.param('answer?', j+1),
+		"(" + req.param('categoryID') + ",'" + req.param('categoryName') + "','" + req.param(questionConstruct) +
+		"','" + req.param(answerConstruct) + "');";
+		
+		console.log(constructedQuery);
+		con.query(constructedQuery,
 		function(err, result) {
 			if (err) {
 			console.error(err);
 		}
-			console.log("Question? Added", j+1);
+			console.log("Question Added", j);
+			res.end();
 		})
-	}	
-    res.end();
+	}
 
 });
 
