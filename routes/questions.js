@@ -12,7 +12,8 @@ var con = mysql.createConnection({
 	host: dbURL,
 	user: "admin",
 	password: "Jown2018!",
-    database: dbName
+    database: dbName,
+	multipleStatements:true
 });
 
 con.connect(function(err) {
@@ -65,16 +66,6 @@ router.get('/getCategory',function(req,res) {
 router.get('/get6Categories',function(req,res) {
 	
 	
-	
-	//if categoryList is empty, initialize
-	/* if(categoryList.length == 0){
-		var stuff = populateCategoryList();
-
-	} */
-	console.log("categoryList is " + categoryList);
-	
-	
-	
 	var m;
 	var cats = [];
 	var currentCat = 0;
@@ -87,35 +78,52 @@ router.get('/get6Categories',function(req,res) {
 		//push a random category onto the cats array
 		currentCat = Math.floor(Math.random() * categoryList.length);
 		cats[m] = categoryList[currentCat];
-		console.log("HEY");
 		//i then remove the category from the selectable pool - this ensures 
 		//we don't return a repeat category for round 2
 		categoryList.splice(currentCat, 1);
 		
 	}
-	console.log(cats);
 	
 	//this will then ask the database for all questions regarding these 5 categories
     console.log("Fetching Category Information")
 	
 	var j;
-	var resultArray = [];
+	var i;
+
+	var queryString = "";
+	var resultString = "[";
+	
 	for(j=0;j<6;j++){
 			
-		var queryString = "SELECT * FROM Questions WHERE titleID = " + cats[j] + ";";
+		queryString = queryString +  "SELECT * FROM Questions WHERE titleID = ?; ";
 		 
-		
-		con.query(queryString,
+	}
+	
+	con.query(queryString, cats,
 		function(err, result) {
 			if(err){
 			console.log(err);
 		}
 		
-		resultArray[j] = JSON.stringify(result);
+		for(i=0;i<6;i++){
+				
+			resultString = resultString + "{titleID:" + result[i][0].titleID + ", title: " +
+			result[i][0].title + ", questions:" + JSON.stringify(result[i]) + "}";
+			
+			if (i<5){
+					resultString = resultString + ", ";
+			}
+			else{
+					resultString = resultString + "]";
+			}
+			 
+		}
 		
+		
+		res.end(resultString);
 		})
-	}
-	res.end(JSON.stringify(resultArray));
+
+
 })     
 
 router.post('/addCategory',function(req,res) {
