@@ -4,7 +4,6 @@ var mysql = require('mysql');
 
 var categoryList = []; //this will be a table of the Category IDs to pick from
 //this categoryList will be used to ensure we don't have the same Category in 2 rounds
-var round = 1;
 
 dbURL='47.90.209.206'
 dbName="WoJ"
@@ -19,6 +18,7 @@ var con = mysql.createConnection({
 con.connect(function(err) {
   if (err) throw err;
   console.log("Connected!");
+  populateCategoryList();
 });
 //need to know how to process arrays into mysql
 
@@ -64,42 +64,30 @@ router.get('/getCategory',function(req,res) {
 //Need to generate 6 random numbers
 router.get('/get6Categories',function(req,res) {
 	
+	
+	
+	//if categoryList is empty, initialize
+	/* if(categoryList.length == 0){
+		var stuff = populateCategoryList();
+
+	} */
+	console.log("categoryList is " + categoryList);
+	
+	
+	
+	var m;
 	var cats = [];
 	var currentCat = 0;
 	
-	//if categoryList is empty, initialize
-	if(round == 1){
-		con.query("SELECT DISTINCT titleID FROM Questions", 
-				function(err, result) {
-					if(err) {
-					console.log(err);
-				}  
-				//loop through entries and add categoryIDs to add to array
-				var k;
-				
-				for(k=0; k<result.length; k++){
-					
-					//Need to Verify this category name (categoryID)
-					categoryList.push(result[k].categoryID);
-					
-				}
-				//console.log(JSON.stringify(result));
-				//send json message to angular
-				//res.end(JSON.stringify(result));
-				console.log(categoryList);
-			})
-		round++;
-	}
-	
-	var i;
+	console.log(categoryList.length);
 	
 	//this will fill the cats array with 6 random categories
-	for(i = 0; i < 6; i++){
+	for(m = 0; m < 6; m++){
 		
 		//push a random category onto the cats array
-		currentCat = Math.floor(Math.random() * categoryList.length)
-		cats[i] = categoryList[currentCat];
-		
+		currentCat = Math.floor(Math.random() * categoryList.length);
+		cats[m] = categoryList[currentCat];
+		console.log("HEY");
 		//i then remove the category from the selectable pool - this ensures 
 		//we don't return a repeat category for round 2
 		categoryList.splice(currentCat, 1);
@@ -127,7 +115,7 @@ router.get('/get6Categories',function(req,res) {
 		
 		})
 	}
-	res.end(resultArray);
+	res.end(JSON.stringify(resultArray));
 })     
 
 router.post('/addCategory',function(req,res) {
@@ -230,5 +218,30 @@ router.post('/deleteCategory',(req,res)=>{
         })
 		
 })
+
+function populateCategoryList() {
+  con.query("SELECT DISTINCT titleID FROM Questions", 
+				function(err, result) {
+					if(err) {
+					console.log(err);
+				}  
+				//loop through entries and add categoryIDs to add to array
+				
+				var k;
+				for(k=0; k<result.length; k++){
+					
+					//Need to Verify this category name (categoryID)
+					categoryList[k] = (result[k].titleID);
+					console.log("you're in the loop rn " + result[k].titleID);
+				}
+				//console.log(JSON.stringify(result));
+				//send json message to angular
+				//res.end(JSON.stringify(result));
+				
+			})
+	return 0;
+  
+  
+}
 
 module.exports = router;
