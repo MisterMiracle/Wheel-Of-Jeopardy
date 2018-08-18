@@ -4,6 +4,7 @@ var mysql = require('mysql');
 
 var categoryList = []; //this will be a table of the Category IDs to pick from
 //this categoryList will be used to ensure we don't have the same Category in 2 rounds
+var round = 1;
 
 dbURL='47.90.209.206'
 dbName="WoJ"
@@ -59,11 +60,36 @@ router.get('/getCategory',function(req,res) {
     })     
 })
 
+
 //Need to generate 6 random numbers
 router.get('/get6Categories',function(req,res) {
 	
 	var cats = [];
 	var currentCat = 0;
+	
+	//if categoryList is empty, initialize
+	if(round == 1){
+		con.query("SELECT DISTINCT titleID FROM Questions", 
+				function(err, result) {
+					if(err) {
+					console.log(err);
+				}  
+				//loop through entries and add categoryIDs to add to array
+				var k;
+				
+				for(k=0; k<result.length; k++){
+					
+					//Need to Verify this category name (categoryID)
+					categoryList.push(result[k].categoryID);
+					
+				}
+				//console.log(JSON.stringify(result));
+				//send json message to angular
+				//res.end(JSON.stringify(result));
+				console.log(categoryList);
+			})
+		round++;
+	}
 	
 	var i;
 	
@@ -79,25 +105,30 @@ router.get('/get6Categories',function(req,res) {
 		categoryList.splice(currentCat, 1);
 		
 	}
+	console.log(cats);
 	
 	//this will then ask the database for all questions regarding these 5 categories
     console.log("Fetching Category Information")
 	
-	var queryString = "SELECT * FROM Questions WHERE categoryID = + " + cats[0] +
-	 " OR categoryID =  " + cats[1] + " OR categoryID =  " + cats[2] + 
-	 " OR categoryID =  " + cats[3] + " OR categoryID =  " + cats[4] + 
-	" OR categoryID =  " + cats[5] + ";";
-	
-	
-	con.query(queryString,
-	function(err, result) {
-		if(err){
-		console.log(err);
+	var j;
+	var resultArray = [];
+	for(j=0;j<6;j++){
+			
+		var queryString = "SELECT * FROM Questions WHERE titleID = " + cats[j] + ";";
+		 
+		
+		con.query(queryString,
+		function(err, result) {
+			if(err){
+			console.log(err);
+		}
+		
+		resultArray[j] = JSON.stringify(result);
+		
+		})
 	}
-	res.end(JSON.stringify(result));
-	})     
-})
-
+	res.end(resultArray);
+})     
 
 router.post('/addCategory',function(req,res) {
     console.log("Adding Category Information") 
