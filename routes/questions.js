@@ -12,7 +12,7 @@ var con = mysql.createConnection({
 	host: dbURL,
 	user: "admin",
 	password: "Jown2018!",
-    database: "WoJ"
+    database: dbName
 });
 
 con.connect(function(err) {
@@ -25,7 +25,7 @@ con.connect(function(err) {
 //less than 12 categories, the game won't start
 router.get('/getAllCategories',function(req,res) {  
    console.log("Fetching All Categories Information")  
-        con.query("SELECT DISTINCT categoryID FROM Questions", 
+        con.query("SELECT DISTINCT titleID FROM Questions", 
             function(err, result) {
                 if(err) {
                 console.log(err);
@@ -35,8 +35,8 @@ router.get('/getAllCategories',function(req,res) {
 			
 			for(i=0; i<result.length; i++){
 				
-				//Need to Verify this category name (categoryID)
-				categoryList.push(result[i].categoryID);
+				//Need to Verify this category name (titleID)
+				categoryList.push(result[i].titleID);
 				
 			}
 			//console.log(JSON.stringify(result));
@@ -50,7 +50,7 @@ router.get('/getCategory',function(req,res) {
 		
 		
 
-		con.query("SELECT * FROM Questions WHERE categoryID = ?",req.param('categoryID'),
+		con.query("SELECT * FROM Questions WHERE titleID = ?",req.param('titleID'),
             function(err, result) {
                 if(err) {
                 console.log(err);
@@ -122,9 +122,9 @@ router.post('/addCategory',function(req,res) {
 		questionConstruct = "question" + j;
 		answerConstruct = "answer" + j;
 		
-		constructedQuery = "INSERT INTO Questions (categoryID, " +
-		"category, questiontext, answertext) VALUES " +
-		"(" + catID + ",'" + req.param('categoryName') + "','" + req.param(questionConstruct) +
+		constructedQuery = "INSERT INTO Questions (titleID, " +
+		"title, qStatement, qAnswer) VALUES " +
+		"(" + catID + ",'" + req.param('title') + "','" + req.param(questionConstruct) +
 		"','" + req.param(answerConstruct) + "');";
 		
 		console.log(constructedQuery);
@@ -148,7 +148,7 @@ router.put('/editCategory', function (req, res) {
 	//Delete Previous Entries
 	console.log("Deleting Previous Category for Replacement") 
 		
-	con.query("DELETE FROM Questions WHERE categoryID = ?", req.param('categoryID'),
+	con.query("DELETE FROM Questions WHERE titleID = ?", req.param('titleID'),
 		function(err, result) {
 			if (err) {
 			console.error(err); 
@@ -167,9 +167,9 @@ router.put('/editCategory', function (req, res) {
 		questionConstruct = "question" + j;
 		answerConstruct = "answer" + j;
 		
-		constructedQuery = "INSERT INTO Questions (categoryID, " +
-		"category, questiontext, answertext) VALUES " +
-		"(" + req.param('categoryID') + ",'" + req.param('categoryName') + "','" + req.param(questionConstruct) +
+		constructedQuery = "INSERT INTO Questions (titleID, " +
+		"title, qStatement, qAnswer) VALUES " +
+		"(" + req.param('titleID') + ",'" + req.param('title') + "','" + req.param(questionConstruct) +
 		"','" + req.param(answerConstruct) + "');";
 		
 		console.log(constructedQuery);
@@ -189,7 +189,7 @@ router.post('/deleteCategory',(req,res)=>{
     console.log("Deleting Category") 
 		//this assumes we're receiving a request to delete a categoryID, which is passed
 		//as an integer parameter from the Angular
-		con.query("DELETE FROM Questions WHERE categoryID = ?", req.param('categoryID'),
+		con.query("DELETE FROM Questions WHERE titleID = ?", req.param('titleID'),
             function(err, result) {
                 if (err) {
                 console.error(err); 
