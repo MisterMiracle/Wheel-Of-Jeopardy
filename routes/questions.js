@@ -72,7 +72,8 @@ router.get('/get6Category',function(req,res) {
 		
 		//push a random category onto the cats array
 		currentCat = Math.floor(Math.random() * categoryList.length)
-		cats[i].push(categoryList[currentCat]);
+		cats[i] = categoryList[currentCat];
+		
 		//i then remove the category from the selectable pool - this ensures 
 		//we don't return a repeat category for round 2
 		categoryList.splice(currentCat, 1);
@@ -81,9 +82,14 @@ router.get('/get6Category',function(req,res) {
 	
 	//this will then ask the database for all questions regarding these 5 categories
     console.log("Fetching Category Information")
-	con.query("SELECT * FROM Questions WHERE categoryID = ?, OR categoryID = ? " +
-	"OR categoryID = ? OR categoryID = ?OR categoryID = ? OR categoryID = ?;",
-	[cats[0], cats[1], cats[2], cats[3], cats[4], cats[5]],
+	
+	var queryString = "SELECT * FROM Questions WHERE categoryID = + " + cats[0] +
+	 " OR categoryID =  " + cats[1] + " OR categoryID =  " + cats[2] + 
+	 " OR categoryID =  " + cats[3] + " OR categoryID =  " + cats[4] + 
+	" OR categoryID =  " + cats[5] + ";";
+	
+	
+	con.query(queryString,
 	function(err, result) {
 		if(err){
 		console.log(err);
