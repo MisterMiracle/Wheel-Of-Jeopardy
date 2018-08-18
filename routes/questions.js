@@ -60,7 +60,7 @@ router.get('/getCategory',function(req,res) {
 })
 
 //Need to generate 6 random numbers
-router.get('/get6Category',function(req,res) {
+router.get('/get6Categories',function(req,res) {
 	
 	var cats = [];
 	var currentCat = 0;
