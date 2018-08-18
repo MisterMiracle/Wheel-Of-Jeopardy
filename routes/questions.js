@@ -111,7 +111,7 @@ router.post('/addCategory',function(req,res) {
 	var questionConstruct;
 	var answerConstruct;
 	
-	var j;
+	var j=1;
 	for(j=1; j<=6; j++){
 		questionConstruct = "question" + j;
 		answerConstruct = "answer" + j;
@@ -128,9 +128,10 @@ router.post('/addCategory',function(req,res) {
 			console.error(err);
 		}
 			console.log("Question Added", j);
+			res.end();
 		})
 	}	
-    res.end();
+    
    
 })
 
