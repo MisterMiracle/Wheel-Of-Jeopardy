@@ -27,24 +27,46 @@ con.connect(function(err) {
 //less than 12 categories, the game won't start
 router.get('/getAllCategories',function(req,res) {  
    console.log("Fetching All Categories Information")  
-        con.query("SELECT DISTINCT titleID FROM Questions", 
-            function(err, result) {
-                if(err) {
-                console.log(err);
-            }  
-			//loop through entries and add categoryIDs to add to array
-			var i;
+	
+	var j;
+	var i;
+
+	var queryString = "";
+	var resultString = "[";
+	
+	for(j=0;j<categoryList.length;j++){
 			
-			for(i=0; i<result.length; i++){
-				
-				//Need to Verify this category name (titleID)
-				categoryList.push(result[i].titleID);
-				
+		queryString = queryString +  "SELECT * FROM Questions WHERE titleID = ?; ";
+		 
+	}
+	
+	
+	con.query(queryString, categoryList,
+		function(err, result) {
+			if(err){
+			console.log(err);
+		}
+		
+		//i'm sorry the string construction is a little nutty, had to do it this way
+		//to avoid dealing with asynchronous mysql query issues.
+		for(i=0;i<categoryList.length;i++){
+			
+			
+			resultString = resultString + "{titleID:" + result[i][0].titleID + ", title: " +
+			result[i][0].title + ", questions:" + JSON.stringify(result[i]) + "}";
+			
+			if (i<(categoryList.length - 1)){
+					resultString = resultString + ", ";
 			}
-			//console.log(JSON.stringify(result));
-			//send json message to angular
-            res.end(JSON.stringify(result));
-        })
+			else{
+					resultString = resultString + "]";
+			}
+			 
+		}
+		
+		
+		res.end(resultString);
+		})
 })
 
 router.get('/getCategory',function(req,res) {
