@@ -7,6 +7,7 @@ var mysql = require('mysql');
 //allCategory will be used for getting all Categories
 var categoryList = []; 
 var allCategory = [];
+var round = 1;
 
 
 dbURL='47.90.209.206'
@@ -84,7 +85,8 @@ router.get('/get6Categories',function(req,res) {
 	
 	var cats = [];
 	var currentCat = 0;
-
+	
+	
 	//this will fill the cats array with 6 random categories
 	for(var m = 0; m < 6; m++){
 		
@@ -96,6 +98,18 @@ router.get('/get6Categories',function(req,res) {
 		//we don't return a repeat category for round 2
 		categoryList.splice(currentCat, 1);
 		
+	}
+	
+	
+	//reset categoryList so that you can have a new game after
+	if (round == 1){
+		round = 2;
+	}
+	else if (round == 2){
+		categoryList = allCategory.slice();
+		console.log(categoryList);
+		console.log(allCategory);
+		round = 1;
 	}
 	
 	//this will then ask the database for all questions regarding these 5 categories
