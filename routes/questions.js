@@ -39,7 +39,7 @@ router.get('/getAllCategories',function(req,res) {
 		queryString = queryString +  "SELECT * FROM Questions WHERE titleID = ?; ";
 		 
 	}
-	
+	console.log(categoryList.length);
 	
 	con.query(queryString, categoryList,
 		function(err, result) {
@@ -52,8 +52,8 @@ router.get('/getAllCategories',function(req,res) {
 		for(i=0;i<categoryList.length;i++){
 			
 			
-			resultString = resultString + "{titleID:" + result[i][0].titleID + ", title: " +
-			result[i][0].title + ", questions:" + JSON.stringify(result[i]) + "}";
+			resultString = resultString + "{\"titleID\":\"" + result[i][0].titleID + "\", \"title\": \"" +
+			result[i][0].title + "\", \"questions\":" + JSON.stringify(result[i]) + "}";
 			
 			if (i<(categoryList.length - 1)){
 					resultString = resultString + ", ";
@@ -129,8 +129,8 @@ router.get('/get6Categories',function(req,res) {
 		
 		for(i=0;i<6;i++){
 				
-			resultString = resultString + "{titleID:" + result[i][0].titleID + ", title: " +
-			result[i][0].title + ", questions:" + JSON.stringify(result[i]) + "}";
+			resultString = resultString + "{\"titleID\":\"" + result[i][0].titleID + "\", \"title\": \"" +
+			result[i][0].title + "\", \"questions\":" + JSON.stringify(result[i]) + "}";
 			
 			if (i<5){
 					resultString = resultString + ", ";
