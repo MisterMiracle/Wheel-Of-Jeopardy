@@ -165,6 +165,9 @@ router.post('/addCategory',function(req,res) {
     } while(categoryList.indexOf(catID) >= 0) //ensure this catID isn't already taken
     console.log("titleID is set: ", catID);
     
+	categoryList.push(catID);
+	allCategory.push(catID);
+	
     displayText = "titleID is set: " + catID + "\nCategory Added.";
     
     //add 5 questions to the database
@@ -175,6 +178,8 @@ router.post('/addCategory',function(req,res) {
     "INSERT INTO Questions (titleID,title, qStatement, qAnswer) VALUES (" + catID + ",'" + req.body.title + "','" +req.body.qStatement4 +   "','" + req.body.qAnswer4 + "');",
     "INSERT INTO Questions (titleID,title, qStatement, qAnswer) VALUES (" + catID + ",'" + req.body.title + "','" +req.body.qStatement5 +   "','" + req.body.qAnswer5 + "');"]
     
+	
+	
     for(var j=0; j<5; j++){
         
         
@@ -247,7 +252,10 @@ router.post('/deleteCategory',(req,res)=>{
                 console.error(err);                 
             }
             console.log("One Category deleted");
-            populateCategoryList()
+            var index = array.indexOf(req.body.titleID);
+			if (index > -1) {
+			  array.splice(index, 1);
+			}
             res.json({ok:"ok"})
         })
 
