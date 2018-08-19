@@ -252,9 +252,14 @@ router.post('/deleteCategory',(req,res)=>{
                 console.error(err);                 
             }
             console.log("One Category deleted");
-            var index = array.indexOf(req.body.titleID);
+            var index = categoryList.indexOf(req.body.titleID);
 			if (index > -1) {
-			  array.splice(index, 1);
+			  categoryList.splice(index, 1);
+			}
+			
+			index = allCategory.indexOf(req.body.titleID);
+			if (index > -1){
+				allCategory.splice(index, 1);
 			}
             res.json({ok:"ok"})
         })
