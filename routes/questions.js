@@ -54,7 +54,7 @@ router.get('/getAllCategories',function(req,res) {
 			
 			resultString = resultString + "{\"titleID\":\"" + result[i][0].titleID + "\", \"title\": \"" +
 			result[i][0].title + "\", \"questions\":" + JSON.stringify(result[i]) + "}";
-			
+			console.log(result[i][0]);
 			if (i<(allCategory.length - 1)){
 					resultString = resultString + ", ";
 			}
