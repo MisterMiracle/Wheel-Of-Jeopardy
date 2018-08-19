@@ -41,13 +41,13 @@ export class WheelOfJeopardyComponent implements OnInit {
     }) 
     
        
-    // this.playerNames=this.dataService.getPlayerNames() 
-    // var i=0
-    // for(let name of this.playerNames){
-    //   this.players.push(new Player(i++,name))
-    // }
-    this.playerNames=["Bryan","Luis","Adrian"]
-    this.players=[new Player(0,"Bryan"), new Player(1,"Luis"), new Player(2,"Adrian")]
+    this.playerNames=this.dataService.getPlayerNames() 
+    var i=0
+    for(let name of this.playerNames){
+      this.players.push(new Player(i++,name))
+    }
+    // this.playerNames=["Bryan","Luis","Adrian"]
+    // this.players=[new Player(0,"Bryan"), new Player(1,"Luis"), new Player(2,"Adrian")]
     this.gameStatus=new GameStatus(this.playerNames) 
     this.message=this.gameStatus.playerInTurnName +" is your turn to spin the wheel"
     $("#messageModalButton").click();
@@ -97,7 +97,7 @@ export class WheelOfJeopardyComponent implements OnInit {
   }
   
   nextTurn(){
-    this.gameStatus.addSpin()
+    
     if(this.gameStatus.spinsInRound==50||this.checkIndecesInQuestionBoard()){
       if(this.gameStatus.roundNumber==1){
         this.gameStatus.nextRound()
@@ -140,7 +140,7 @@ export class WheelOfJeopardyComponent implements OnInit {
     return (this.questionIndex[0]==5&&this.questionIndex[1]==5&&this.questionIndex[2]==5&&this.questionIndex[3]==5&&this.questionIndex[4]==5)
   }
   spinWheel(){
-    
+    this.gameStatus.addSpin()
     //this method should return a value representing the action to be
     this.sector=this.wheel.spinWheel()
     this.landedOn=this.sector.name;
@@ -227,6 +227,7 @@ export class WheelOfJeopardyComponent implements OnInit {
   }
   wrongAnswer(){
     if(this.players[this.gameStatus.playerIndex].hasToken()){
+      this.players[this.gameStatus.playerIndex].reduceRoundPoints(this.gameStatus.roundNumber,this.calculatePoints(this.questionIndex[this.categoryPickedId]))
       $("#triggerModalButtonPlayerHasTokens").click();
       
     }else{
