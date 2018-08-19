@@ -14,3 +14,10 @@
 .playersDiv{
     margin-top: 30px;
 }
+.questionPicked{
+    background-color: #c0c4c6 !important;
+}
+
+.GameStatus{
+    margin-left: 70px;
+}

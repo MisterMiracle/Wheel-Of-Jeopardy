@@ -1,8 +1,10 @@
 var express = require('express')
 var bodyParser  = require('body-parser')
+var cors= require("cors")
 var path = require('path')
 var http = require('http')
 var app= express()
+
 
 //import routes
 var questions=require('./routes/questions')
@@ -12,6 +14,7 @@ var questions=require('./routes/questions')
 //var requirements=require('./routes/requirements')
 //var recommendations=require('./routes/recommendations')
 
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
 

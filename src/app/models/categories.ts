@@ -3,7 +3,7 @@ import {Question} from './question'
 
 export const CATEGORIES:Category[]=[
     {
-        id:1,
+        titleID:0,
         title:"Candies",
         questions:[
           {
@@ -34,7 +34,7 @@ export const CATEGORIES:Category[]=[
         ]
       },
       {
-        id:1,
+        titleID:1,
         title:"Pasta",
         questions:[
           {
@@ -65,7 +65,7 @@ export const CATEGORIES:Category[]=[
         ]
       },
       {
-        id:1,
+        titleID:2,
         title:"Kitchen",
         questions:[
           {
@@ -96,7 +96,7 @@ export const CATEGORIES:Category[]=[
         ]
       },
       {
-        id:1,
+        titleID:3,
         title:"Flowers",
         questions:[
           {
@@ -127,7 +127,7 @@ export const CATEGORIES:Category[]=[
         ]
       },
       {
-        id:1,
+        titleID:4,
         title:"Animals",
         questions:[
           {
@@ -158,7 +158,7 @@ export const CATEGORIES:Category[]=[
         ]
       },
       {
-        id:1,
+        titleID:5,
         title:"Furniture",
         questions:[
           {

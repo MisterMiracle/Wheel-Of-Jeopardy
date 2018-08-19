@@ -2,13 +2,13 @@
   <div class="container-fluid">
     
     <div class="row">
-      <div class="col-md-4 wheelDiv" >
+      <div class="col-md-3 wheelDiv" >
           <h4 class="sub-header wheelTitle" >Wheel</h4>
           <div class="row wheel" > 
             <img src="assets/images/wheel.png" alt="image">
           </div>
           <div class="row wheelButton"> 
-            <button class="btn btn-success btn-sm" (click)="spinWheel()">Spin Wheel</button>
+            <button class="btn btn-success btn-sm spinWheelButton" (click)="spinWheel()">Spin Wheel</button>
           </div>
       </div>
     <div class="col-md-6 ">
@@ -16,54 +16,74 @@
         <table class="table table-bordered table-sm" ng-disabled="true">
             <thead class="thead-light">
               <tr>
-                <th *ngFor="let cat of categories; let i=index"><button class="btn btn-primary btn-sm" (click)="pickNextQuestion(i)">{{cat.title}}</button></th>
+                <th *ngFor="let cat of categories; let i=index"><button class="btn btn-danger btn-sm disabled categoryButton" (click)="pickNextQuestion(i)">{{cat.title}}</button></th>
               </tr>
             </thead>
             <tbody>
               <!-- Need to makes this table better to handle coloring when questions are being picked -->
              <tr>                
-                <td >$200</td>
-                <td>$200</td>
-                <td>$200</td>
-                <td>$200</td>
-                <td>$200</td>
-                <td>$200</td>
+                <td class="question0-0">$200</td>
+                <td class="question0-1">$200</td>
+                <td class="question0-2">$200</td>
+                <td class="question0-3">$200</td>
+                <td class="question0-4">$200</td>
+                <td class="question0-5">$200</td>
               </tr> 
               <tr>                
-                  <td>$400</td>
-                  <td>$400</td>
-                  <td>$400</td>
-                  <td>$400</td>
-                  <td>$400</td>
-                  <td>$400</td>
+                  <td class="question1-0">$400</td>
+                  <td class="question1-1">$400</td>
+                  <td class="question1-2">$400</td>
+                  <td class="question1-3">$400</td>
+                  <td class="question1-4">$400</td>
+                  <td class="question1-5">$400</td>
                 </tr> 
             <tr>                
-                <td>$600</td>
-                <td>$600</td>
-                <td>$600</td>
-                <td>$600</td>
-                <td>$600</td>
-                <td>$600</td>
+                <td class="question2-0">$600</td>
+                <td class="question2-1">$600</td>
+                <td class="question2-2">$600</td>
+                <td class="question2-3">$600</td>
+                <td class="question2-4">$600</td>
+                <td class="question2-5">$600</td>
               </tr> 
               <tr>                
-                  <td>$800</td>
-                  <td>$800</td>
-                  <td>$800</td>
-                  <td>$800</td>
-                  <td>$800</td>
-                  <td>$800</td>
+                  <td class="question3-0">$800</td>
+                  <td class="question3-1">$800</td>
+                  <td class="question3-2">$800</td>
+                  <td class="question3-3">$800</td>
+                  <td class="question3-4">$800</td>
+                  <td class="question3-5">$800</td>
                 </tr> 
                 <tr>                
-                    <td>$1000</td>
-                    <td>$1000</td>
-                    <td>$1000</td>
-                    <td>$1000</td>
-                    <td>$1000</td>
-                    <td>$1000</td>
+                    <td class="question4-0">$1000</td>
+                    <td class="question4-1">$1000</td>
+                    <td class="question4-2">$1000</td>
+                    <td class="question4-3">$1000</td>
+                    <td class="question4-4">$1000</td>
+                    <td class="question4-5">$1000</td>
                   </tr>             
               
             </tbody>
           </table>
+      </div>
+      <div class="col-md-2">
+        <table class="table table-bordered col-md-4 GameStatus">
+          <thead>
+              <tr>
+                  <th colspan="2">Game Status</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>Turn of: {{gameStatus.playerInTurnName}} </td>                  
+              </tr>
+              <tr>
+                <td>Num of Round: {{gameStatus.roundNumber}} </td>                  
+            </tr>
+            <tr>
+              <td>Num of Spins in Round: {{gameStatus.spinsInRound}} </td>                  
+          </tr>
+          </tbody>
+        </table>
       </div>
       </div>
       <div class="row playersDiv">
@@ -86,10 +106,180 @@
       
   </div>
 </div>
-
+<button id="triggerModalButton" type="button" [hidden]="true" data-toggle="modal" data-target="#wheelResultModal"  class="btn btn-sm btn-outline-secondary">wheelResult</button>
+<button id="messageModalButton" type="button" [hidden]="true" data-toggle="modal" data-target="#messageModal"  class="btn btn-sm btn-outline-secondary">other messages</button>
+<button id="message2ModalButton" type="button" [hidden]="true" data-toggle="modal" data-target="#message2Modal"  class="btn btn-sm btn-outline-secondary">freeTurn/bankrup/loseturn</button>
+<button id="triggerModalButtonPickQuestion" type="button" [hidden]="true" data-toggle="modal" data-target="#displayQuestionModal"  class="btn btn-sm btn-outline-secondary">questionPicked</button>
+<button id="triggerModalButtonDisplayAnswer" type="button" [hidden]="true" data-toggle="modal" data-target="#displayAnswerModal"  class="btn btn-sm btn-outline-secondary">displayAnswer</button>
+<button id="triggerModalButtonPlayerHasTokens" type="button" [hidden]="true" data-toggle="modal" data-target="#useTokenModal"  class="btn btn-sm btn-outline-secondary">displayAnswer</button>
+<button id="triggerModalShowWinner" type="button" [hidden]="true" data-toggle="modal" data-target="#winnerModal"  class="btn btn-sm btn-outline-secondary">displayAnswer</button>
 
 <!-- Modals -->
+<div id="displayAnswerModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Answer: </h5>
+       
+      </div>
+      <div class="modal-body">
+        
+          <div class="form-group">
+              <label for="title">The answer to the question is: {{nextAnswer}}<br>Did {{gameStatus.playerInTurnName}} answer correctly?</label>
+              
+            </div>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal"  (click)="correctAnswer()">Yes</button>
+		<button type="button" class="btn btn-primary" data-dismiss="modal"  (click)="wrongAnswer()">No</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div id="useTokenModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{gameStatus.playerInTurnName}} you have at least one token</h5>
+       
+      </div>
+      <div class="modal-body">
+        
+          <div class="form-group">
+              <label for="title">Do you want to use one token?</label>
+              
+            </div>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal"  (click)="useToken()">Yes</button>
+		<button type="button" class="btn btn-primary" data-dismiss="modal"  (click)="dontUseToken()">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="displayQuestionModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Question: </h5>
+       
+      </div>
+      <div class="modal-body">
+        
+          <div class="form-group">
+              <label for="title">{{gameStatus.playerInTurnName}} answer the following question: {{nextQuestion}}</label>
+            </div>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal"  (click)="displayAnswer()"> Show Answer</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="wheelResultModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Wheel Result</h5>
+       
+      </div>
+      <div class="modal-body">
+        
+          <div class="form-group">
+              <label for="title">Wheel Landed on: {{sector.name}}</label>
+			  <p></p>
+			  <div>
+			  {{userPrompt}}
+			  </div>
+			  <!--
+			  <div ng-switch={{sector.value}}>
+				<div ng-switch-when="Category">Category Sector</div>
+				<div ng-switch-when="YourChoice">Player picks a category</div>
+				<div ng-switch-when="OpponentsChoice">Opponent picks a category</div>				
+				<div ng-switch-default></div>			  
+			  </div>
+			  -->
+			  <!--
+			  <label [class.selected]="Category === sector.value">
+				Category Sector
+			  </label>			  
+			  <label [class.selected]="YourChoice === sector.value">
+				Player picks a category
+			  </label>			  
+			  <label [class.selected]="OpponentsChoice === sector.value">
+				Opponent picks a category
+			  </label>
+-->			  
+          </div>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal"  (click)="parseSpinResult()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="messageModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Message</h5>
+       
+      </div>
+      <div class="modal-body">
+        
+          <div class="form-group">
+              <label for="message">{{message}}</label><br>
+             
+            </div>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="message2Modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Message</h5>
+       
+      </div>
+      <div class="modal-body">
+        
+          <div class="form-group">
+              <label for="message">{{message}}</label><br>
+             
+            </div>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="nextTurn()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="winnerModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">And the winner is.......</h5>
+       
+      </div>
+      <div class="modal-body">
+        
+          <div class="form-group">
+              <label for="message">Congratulations {{winner}}!!!!!!</label><br>
+             
+            </div>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" routerLink="/dashboard">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- <div id="categoryModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
 <div class="modal-dialog" role="document">

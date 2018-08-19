@@ -14,18 +14,26 @@ export class Player {
       this.totalPoints=0
       this.numTokens=0
     }
-    addRound1Points(points:number){
-      this.round1Points+=points
+    addRoundPoints(round:number,points:number){
+      
+      if(round==1){
+        this.round1Points+=points
+      }
+      else{
+        this.round2Points+=points
+      }
+      this.updateTotalPoints()
+    }    
+    reduceRoundPoints(round:number,points:number){
+      if(round==1){
+        this.round1Points-=points
+      }
+      else{
+        this.round2Points-=points
+      }
+      this.updateTotalPoints()
     }
-    addRound2Points(points:number){
-      this.round2Points+=points
-    }
-    reduceRound1Points(points:number){
-      this.round1Points-=points
-    }
-    reduceRound2Points(points:number){
-      this.round2Points-=points
-    }
+    
     goBankrupt(round:number){
       if(round==1){
         this.round1Points=0;
@@ -33,11 +41,21 @@ export class Player {
       else{
         this.round2Points=0
       }
+      this.updateTotalPoints()
     }
     getTotalPoints(){
       return this.totalPoints
     }
     hasToken(){
       return this.numTokens>0
+    }
+    addToken(){
+      this.numTokens++
+    }
+    useOneToken(){
+      this.numTokens--
+    }
+    updateTotalPoints(){
+      this.totalPoints=this.round1Points+this.round2Points
     }
   }

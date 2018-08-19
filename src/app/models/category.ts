@@ -1,11 +1,13 @@
 import {Question} from './question'
 export class Category{
-    id: number;
+    titleID: number;
     title: string;
     questions:Question[];
+	//questionIndex: number;
     constructor(id:number,title:string){
-        this.id=id;
+        this.titleID=id;
         this.title=title;
+		//this.questionIndex=0;
         
     }
 }

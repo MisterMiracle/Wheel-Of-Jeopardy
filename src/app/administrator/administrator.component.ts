@@ -12,27 +12,41 @@ export class AdministratorComponent implements OnInit {
   tempCategory:any={id:0,title:"",questions:[{qStatement:"",qAnswer:""},{qStatement:"",qAnswer:""},{qStatement:"",qAnswer:""},{qStatement:"",qAnswer:""},{qStatement:"",qAnswer:""}]}
   action:String="Add";
   constructor(private categoryService:CategoryService) { 
-    this.categories=this.getCategories()
+    this.getCategories()
   }
 
   ngOnInit() {
     
   }
   getCategories(){
-    return this.categoryService.getCategories();
+
+    this.categoryService.getAllCategories().subscribe(data=>{
+      this.categories=data
+    })
+    
   }
   addCategoryAction(category:any){
-    category.id=this.categories.length
-    this.categoryService.addCategory(category);
-    this.categories=this.getCategories();
+    //category.titleID=this.categories.length
+    this.categoryService.addCategory(category).subscribe(data=>{
+      this.getCategories()
+    });
+    
+    
   }
   updateCategoryAction(category:any){
-    this.categoryService.updateCategory(category);
-    this.categories=this.getCategories();
+    this.categoryService.updateCategory(category).subscribe(data=>{
+      this.getCategories()
+    });
+    
+    
+    
   }
+  
   deleteCategoryAction(categoryId:any){
-    this.categoryService.deleteCategory(categoryId);
-    this.categories= this.getCategories();
+    this.categoryService.deleteCategory(categoryId).subscribe(data=>{
+      this.getCategories();
+    });
+    
   }
 
   addCategory(){
@@ -51,20 +65,41 @@ export class AdministratorComponent implements OnInit {
   } 
   
   executeCategoryAction(){
-    console.log(this.tempCategory)
+    // console.log(this.tempCategory)
     if(this.action=="Add"){
-      this.addCategoryAction(this.tempCategory);
+      var outputObjt=this.setUpOutputObject(this.tempCategory)
+      console.log("outputobject: ",outputObjt)
+      this.addCategoryAction(outputObjt);
     }
     else if(this.action=="Update"){
-      this.updateCategoryAction(this.tempCategory);
+      var outputObjt=this.setUpOutputObject(this.tempCategory)
+      console.log(outputObjt)
+      this.updateCategoryAction(outputObjt);
       
     }
     else if(this.action=="Delete"){
-      this.deleteCategoryAction(this.tempCategory.id)
+      this.deleteCategoryAction(this.tempCategory.titleID)
     }
   }
   resetTempCategory(){
     return {id:0,title:"",questions:[{qStatement:"",qAnswer:""},{qStatement:"",qAnswer:""},{qStatement:"",qAnswer:""},{qStatement:"",qAnswer:""},{qStatement:"",qAnswer:""}]}
+  }
+  setUpOutputObject(category:any){
+    var catObject={
+      titleID:category.titleID,
+      title:category.title,
+      qStatement1:category.questions[0].qStatement,
+      qAnswer1:category.questions[0].qAnswer,
+      qStatement2:category.questions[1].qStatement,
+      qAnswer2:category.questions[1].qAnswer,
+      qStatement3:category.questions[2].qStatement,
+      qAnswer3:category.questions[2].qAnswer,
+      qStatement4:category.questions[3].qStatement,
+      qAnswer4:category.questions[3].qAnswer,
+      qStatement5:category.questions[4].qStatement,
+      qAnswer5:category.questions[4].qAnswer,
+    }
+    return catObject
   }
 
 

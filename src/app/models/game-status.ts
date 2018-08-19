@@ -1,0 +1,29 @@
+export class GameStatus{
+    playerNames:string[]
+    playerIndex:number
+    playerInTurnName:string=""
+    roundNumber:number
+    spinsInRound:number
+    constructor(playerNames:string[]){
+        this.playerNames=playerNames
+        this.playerIndex=0
+        this.playerInTurnName=this.playerNames[0]
+        this.roundNumber=1
+        this.spinsInRound=0
+    }
+    nextRound(){
+        this.roundNumber++
+        this.spinsInRound=0
+        this.nextPlayerTurn()
+    }
+    addSpin(){
+        this.spinsInRound++
+    }
+    nextPlayerTurn(){
+        this.playerIndex+=1
+        if(this.playerIndex==3){
+            this.playerIndex=0
+        }
+        this.playerInTurnName=this.playerNames[this.playerIndex]
+    }
+}
