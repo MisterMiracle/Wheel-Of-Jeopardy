@@ -98,7 +98,7 @@ export class WheelOfJeopardyComponent implements OnInit {
   
   nextTurn(){
     
-    if(this.gameStatus.spinsInRound==50||this.checkIndecesInQuestionBoard()){
+    if(this.gameStatus.spinsInRound>=50||this.checkIndecesInQuestionBoard()){
       if(this.gameStatus.roundNumber==1){
         this.gameStatus.nextRound()
         this.categoryService.get6Categories().subscribe(data=>{
@@ -169,6 +169,7 @@ export class WheelOfJeopardyComponent implements OnInit {
   }
   loseTurn(){
     if(this.players[this.gameStatus.playerIndex].hasToken()){
+      this.disableCategoryButtons()
       $("#triggerModalButtonPlayerHasTokens").click();
       
     }
@@ -228,6 +229,7 @@ export class WheelOfJeopardyComponent implements OnInit {
   wrongAnswer(){
     if(this.players[this.gameStatus.playerIndex].hasToken()){
       this.players[this.gameStatus.playerIndex].reduceRoundPoints(this.gameStatus.roundNumber,this.calculatePoints(this.questionIndex[this.categoryPickedId]))
+      this.disableCategoryButtons()
       $("#triggerModalButtonPlayerHasTokens").click();
       
     }else{
@@ -279,6 +281,11 @@ export class WheelOfJeopardyComponent implements OnInit {
     }
   }
   resetQuestionBoard(){
+    $(".question0-0").removeClass("questionPicked")
+    $(".question1-0").removeClass("questionPicked")
+    $(".question2-0").removeClass("questionPicked")
+    $(".question3-0").removeClass("questionPicked")
+    $(".question4-0").removeClass("questionPicked")
     $(".question0-1").removeClass("questionPicked")
     $(".question1-1").removeClass("questionPicked")
     $(".question2-1").removeClass("questionPicked")
@@ -299,11 +306,6 @@ export class WheelOfJeopardyComponent implements OnInit {
     $(".question2-4").removeClass("questionPicked")
     $(".question3-4").removeClass("questionPicked")
     $(".question4-4").removeClass("questionPicked")
-    $(".question0-5").removeClass("questionPicked")
-    $(".question1-5").removeClass("questionPicked")
-    $(".question2-5").removeClass("questionPicked")
-    $(".question3-5").removeClass("questionPicked")
-    $(".question4-5").removeClass("questionPicked")
   }
 
 }
