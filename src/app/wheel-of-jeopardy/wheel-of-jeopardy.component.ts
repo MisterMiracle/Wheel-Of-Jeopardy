@@ -306,6 +306,11 @@ export class WheelOfJeopardyComponent implements OnInit {
     $(".question2-4").removeClass("questionPicked")
     $(".question3-4").removeClass("questionPicked")
     $(".question4-4").removeClass("questionPicked")
+    $(".question0-5").removeClass("questionPicked")
+    $(".question1-5").removeClass("questionPicked")
+    $(".question2-5").removeClass("questionPicked")
+    $(".question3-5").removeClass("questionPicked")
+    $(".question4-5").removeClass("questionPicked")
   }
 
 }
