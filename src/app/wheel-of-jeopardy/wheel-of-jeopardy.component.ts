@@ -30,6 +30,8 @@ export class WheelOfJeopardyComponent implements OnInit {
   categoryPickedId:number=0
   winner:string=""
   landedOn:string=""
+  timer:number=15
+  interval:any
   //var oppBool = 0;
   
   constructor(private categoryService:CategoryService, private dataService:DataService) {
@@ -67,7 +69,10 @@ export class WheelOfJeopardyComponent implements OnInit {
     this.categoryPickedId=catId
     var qIndex=this.questionIndex[catId]
     if(qIndex==5){
-      if(this.landedOn=="YourChoice"||this.landedOn=="OpponentsChoice"){
+      if(this.gameStatus.spinsInRound==0||this.checkIndecesInQuestionBoard()){
+        this.nextTurn()
+      }
+      else if(this.landedOn=="YourChoice"||this.landedOn=="OpponentsChoice"){
         this.message="Please select another category; the selected category has no available questions"
         $("#messageModalButton").click();
       }
@@ -79,6 +84,21 @@ export class WheelOfJeopardyComponent implements OnInit {
 
     }
     else{
+      //start timer
+      this.timer=15
+      this.interval=setInterval(() => {        
+          if(this.timer > 0) {
+            this.timer--;
+          } else {
+            $("#closeQuestionModal").click()
+            this.timer=15
+            this.message="Time has run out for: "+this.gameStatus.playerInTurnName
+            $("#message2ModalButton").click();
+           
+            
+          }
+        },1000);
+      
       $(".question"+qIndex+"-"+catId).addClass("questionPicked")
       //instead of using category id from database default ids from 0 to 5
       //this.CATEGORIES.Category[catID]
@@ -92,13 +112,15 @@ export class WheelOfJeopardyComponent implements OnInit {
   }
   
   displayAnswer(){
+  clearInterval(this.interval)
+  this.interval=null
 	this.nextAnswer = this.questionPicked.qAnswer
 	$("#triggerModalButtonDisplayAnswer").click()	
   }
   
   nextTurn(){
-    
-    if(this.gameStatus.spinsInRound>=50||this.checkIndecesInQuestionBoard()){
+    clearInterval(this.interval)
+    if(this.gameStatus.spinsInRound==0||this.checkIndecesInQuestionBoard()){
       if(this.gameStatus.roundNumber==1){
         this.gameStatus.nextRound()
         this.categoryService.get6Categories().subscribe(data=>{
@@ -108,7 +130,7 @@ export class WheelOfJeopardyComponent implements OnInit {
         
         this.resetQuestionBoard()      
         this.questionIndex=[0,0,0,0,0,0]
-        this.message="Starting Round 2. "+this.gameStatus.playerInTurnName +" is your turn to spin the wheel"
+        this.message="Round 1 is Over. Starting Round 2. "+this.gameStatus.playerInTurnName +" is your turn to spin the wheel"
         $("#messageModalButton").click();
         this.disableCategoryButtons();
       }
@@ -140,7 +162,8 @@ export class WheelOfJeopardyComponent implements OnInit {
     return (this.questionIndex[0]==5&&this.questionIndex[1]==5&&this.questionIndex[2]==5&&this.questionIndex[3]==5&&this.questionIndex[4]==5)
   }
   spinWheel(){
-    this.gameStatus.addSpin()
+    
+     this.gameStatus.addSpin() 
     //this method should return a value representing the action to be
     this.sector=this.wheel.spinWheel()
     this.landedOn=this.sector.name;
@@ -157,9 +180,10 @@ export class WheelOfJeopardyComponent implements OnInit {
         this.userPrompt = "";
         break;
       }
-	}
-    
+	  }    
     $("#triggerModalButton").click()
+    
+    
   }
   freeTurn(){
     this.message=this.gameStatus.playerInTurnName +" earns a token!"
