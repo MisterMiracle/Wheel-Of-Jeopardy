@@ -69,7 +69,7 @@ export class WheelOfJeopardyComponent implements OnInit {
     this.categoryPickedId=catId
     var qIndex=this.questionIndex[catId]
     if(qIndex==5){
-      if(this.gameStatus.spinsInRound==0||this.checkIndecesInQuestionBoard()){
+      if(this.gameStatus.spinsInRound<=0||this.checkIndecesInQuestionBoard()){
         this.nextTurn()
       }
       else if(this.landedOn=="YourChoice"||this.landedOn=="OpponentsChoice"){
@@ -120,7 +120,7 @@ export class WheelOfJeopardyComponent implements OnInit {
   
   nextTurn(){
     clearInterval(this.interval)
-    if(this.gameStatus.spinsInRound==0||this.checkIndecesInQuestionBoard()){
+    if(this.gameStatus.spinsInRound<=0||this.checkIndecesInQuestionBoard()){
       if(this.gameStatus.roundNumber==1){
         this.gameStatus.nextRound()
         this.categoryService.get6Categories().subscribe(data=>{
@@ -239,7 +239,7 @@ export class WheelOfJeopardyComponent implements OnInit {
   doubleScore(){
     this.message=this.gameStatus.playerInTurnName +" score has been doubled!"
     $("#message2ModalButton").click();
-    this.players[this.gameStatus.playerIndex].addRoundPoints(this.gameStatus.roundNumber,this.players[this.gameStatus.playerIndex].getTotalPoints())
+    this.players[this.gameStatus.playerIndex].doublePoints(this.gameStatus.roundNumber)
     // this.nextTurn();  
   }
   opponentsChoice(){

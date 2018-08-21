@@ -33,7 +33,14 @@ export class Player {
       }
       this.updateTotalPoints()
     }
-    
+    doublePoints(round:number){
+      if(round==1){
+        this.round1Points+=this.round1Points
+      }
+      else{
+        this.round2Points+=this.round2Points
+      }
+    }
     goBankrupt(round:number){
       if(round==1){
         this.round1Points=0;

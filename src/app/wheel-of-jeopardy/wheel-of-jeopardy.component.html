@@ -96,7 +96,7 @@
           </thead>
           <tbody>
               <tr>
-                  <td>Points: {{player.totalPoints}}</td>
+                  <td>Points: <div *ngIf="gameStatus.roundNumber==1">{{player.round1Points}}</div><div *ngIf="gameStatus.roundNumber==2">{{player.round2Points}}</div></td>
                   <td>Tokens: {{player.numTokens}}</td>
               </tr>
           </tbody>
